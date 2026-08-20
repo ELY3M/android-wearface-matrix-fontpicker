@@ -1,5 +1,12 @@
 "The Matrix" face for Android Wear
 ========================================
+I added font picker in this app.  
+I read reviews of people who was not happy with the new font. 
+so I went searched for ttf font that is very similar to the old font.  
+I found it and added it and I added font picker option.   
+to access the font picker option. you have to go thru android wear app and look for the matrix app
+and touch to get to the font picker.    
+
 
 By Dheera Venkatraman  
 http://dheera.net/  
