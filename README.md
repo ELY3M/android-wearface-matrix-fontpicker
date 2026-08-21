@@ -1,5 +1,13 @@
 "The Matrix" face for Android Wear
 ========================================
+
+This version will not work on newer wearos!  
+
+You have to go to this repo at 
+https://github.com/ELY3M/Matrix-Watchface-in-XML
+
+========================================
+
 I added font picker in this app.  
 I read reviews of people who was not happy with the new font. 
 so I went searched for ttf font that is very similar to the old font.  
