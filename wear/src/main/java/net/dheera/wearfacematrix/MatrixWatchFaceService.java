@@ -20,6 +20,8 @@ import android.support.wearable.watchface.WatchFaceStyle;
 import android.text.format.DateFormat;
 import android.text.format.Time;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -63,6 +65,20 @@ public class MatrixWatchFaceService extends CanvasWatchFaceService {
         boolean mMute;
         Time mTime;
 
+/*
+
+digital.ttf
+ds_digib.ttf
+led_counter.ttf
+matrix.ttf
+miltown2.ttf
+mouseledumod.ttf
+orbitron_medium.otf
+pixellcd_7.ttf
+subwayticker.ttf
+
+
+* */
         boolean matrixfont;
         boolean subwaytickerfont;
 
@@ -476,6 +492,7 @@ public class MatrixWatchFaceService extends CanvasWatchFaceService {
             if (subwaytickerfont) {
                 mDigitalActiveTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "subwayticker.ttf"));
             }
+
             if (matrixfont) {
                 mDigitalAmbientTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "miltown2.ttf"));
             }
@@ -501,6 +518,44 @@ public class MatrixWatchFaceService extends CanvasWatchFaceService {
             MatrixWatchFaceUtil.setBoolean(context, MatrixWatchFaceUtil.KEY_SUBWAYTICKERFONT, subwaytickerfont);
         }
 
+
+        @Override
+        public void onTouchEvent(MotionEvent event) {
+
+            final int action = event.getAction();
+            switch (action) {
+                case MotionEvent.ACTION_BUTTON_PRESS: {
+                    Log.i("matrix", "button pressed!!!!");
+                    break;
+                }
+            }
+
+            //super.onTouchEvent(event);
+        }
+
+        @Override
+        public void onTapCommand(int tapType, int x, int y, long eventTime) {
+            switch (tapType) {
+                case TAP_TYPE_TOUCH:
+                    Log.i("matrix", "tapped!!!!");// User touched the screen
+                    break;
+                case TAP_TYPE_TOUCH_CANCEL:
+                    // Touch gesture canceled
+                    break;
+                case TAP_TYPE_TAP:
+                    // User completed a tap
+                    // Do action and invalidate() to redraw
+                    //invalidate();
+                    break;
+            }
+        }
+
+
+
+
+
+
+        //WE NEED TO REMOVE THOSE GOOGLE STUFF HERE!!!!//
         @Override
         public void onConnected(Bundle connectionHint) {
             Log.d(TAG, "onConnected: " + connectionHint);
@@ -517,6 +572,9 @@ public class MatrixWatchFaceService extends CanvasWatchFaceService {
         public void onConnectionFailed(ConnectionResult result) {
             Log.d(TAG, "onConnectionFailed: " + result);
         }
+
+
+
     }
 
 }

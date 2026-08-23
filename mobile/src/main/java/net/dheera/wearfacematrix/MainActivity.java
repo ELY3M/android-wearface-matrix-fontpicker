@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 
+/*
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -14,18 +15,19 @@ import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
+*/
 
 
 public class MainActivity extends Activity {
 
     private CheckBox matrixfont;
     private CheckBox subwaytickerfont;
-    private GoogleApiClient googleApiClient = null;
+    ///private GoogleApiClient googleApiClient = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initializeWearable();
+        ///initializeWearable();
         setContentView(R.layout.activity_main);
         matrixfont = (CheckBox) findViewById(R.id.matrixfont);
         subwaytickerfont = (CheckBox) findViewById(R.id.subwaytickerfont);
@@ -34,7 +36,7 @@ public class MainActivity extends Activity {
         apply.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 saveValues();
-                pushValuesToWearable();
+                //pushValuesToWearable();
             }
         });
 
@@ -57,6 +59,7 @@ public class MainActivity extends Activity {
     }
 
 
+    /*
     private void pushValuesToWearable() {
         boolean matrixfont_set = matrixfont.isChecked();
         boolean subwaytickerfont_set = subwaytickerfont.isChecked();
@@ -78,7 +81,6 @@ public class MainActivity extends Activity {
             googleApiClient.connect();
         }
     }
-
 
     private void initializeWearable() {
         if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this)
@@ -109,6 +111,7 @@ public class MainActivity extends Activity {
         .build();
         }
         }
+*/
 
 
 }
