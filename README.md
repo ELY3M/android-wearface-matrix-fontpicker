@@ -8,6 +8,11 @@ https://github.com/ELY3M/Matrix-Watchface-in-XML
 
 ========================================
 
+This is standalone wear watchface now.    
+I added more fonts options.    
+This watchface will only work on wearos version 1 to 4  
+ 
+========================================
 I added font picker in this app.  
 I read reviews of people who was not happy with the new font. 
 so I went searched for ttf font that is very similar to the old font.  
