@@ -111,7 +111,10 @@ subwayticker.ttf
         android:layout_height="wrap_content"
         android:text="subwayticker"
         android:id="@+id/subwayticker"
-        android:layout_below="@+id/pixellcd_7" />
+        android:layout_below="@+id/pixellcd_7"
+        android:layout_alignLeft="@+id/textView"
+        android:layout_alignStart="@+id/textView"
+        android:typeface="monospace" />
 
     <Button
         android:layout_width="wrap_content"
@@ -119,6 +122,7 @@ subwayticker.ttf
         android:text="Apply font to your watch face"
         android:id="@+id/applybutton"
         android:layout_below="@+id/subwayticker"
+        android:typeface="monospace"
         android:layout_centerHorizontal="true" />
 
 

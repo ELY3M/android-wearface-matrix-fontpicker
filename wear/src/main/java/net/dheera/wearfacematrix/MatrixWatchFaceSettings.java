@@ -37,29 +37,16 @@ subwayticker.ttf
 	public static final String SUBWAYTICKER = "subwayticker";
     public static final String PATH_CONFIG = "/MatrixWatchFace/Config/";
 
-/*
 
-digital.ttf
-ds_digib.ttf
-led_counter.ttf
-matrix.ttf
-miltown2.ttf
-mouseledumod.ttf
-orbitron_medium.otf
-pixellcd_7.ttf
-subwayticker.ttf
-
- */
-
-    private CheckBox digital;
-    private CheckBox ds_digib;
-    private CheckBox led_counter;
-    private CheckBox matrix;
-    private CheckBox miltown2;
-    private CheckBox mouseledumod;
-    private CheckBox orbitron_medium;
-    private CheckBox pixellcd_7;
-    private CheckBox subwayticker;
+    public static CheckBox digital;
+    public static CheckBox ds_digib;
+    public static CheckBox led_counter;
+    public static CheckBox matrix;
+    public static CheckBox miltown2;
+    public static CheckBox mouseledumod;
+    public static CheckBox orbitron_medium;
+    public static CheckBox pixellcd_7;
+    public static CheckBox subwayticker;
     ///private GoogleApiClient googleApiClient = null;
 
     @Override
@@ -69,6 +56,7 @@ subwayticker.ttf
         setContentView(R.layout.fontpicker);
         digital = (CheckBox) findViewById(R.id.digital);
         ds_digib = (CheckBox) findViewById(R.id.ds_digib);
+        led_counter = (CheckBox) findViewById(R.id.led_counter);
         matrix = (CheckBox) findViewById(R.id.matrix);
         miltown2 = (CheckBox) findViewById(R.id.miltown2);
         mouseledumod = (CheckBox) findViewById(R.id.mouseledumod);
@@ -80,16 +68,40 @@ subwayticker.ttf
         apply.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
 
-                //saveValues();
+                saveValues();
                 //pushValuesToWearable();
+
             }
         });
 
-        //loadValues();
+        loadValues();
 
     }
 
 
+    public void saveValues() {
+        setBoolean(this, DIGITAL, digital.isChecked());
+        setBoolean(this, DS_DIGIB, ds_digib.isChecked());
+        setBoolean(this, LED_COUNTER, led_counter.isChecked());
+        setBoolean(this, MATRIX, matrix.isChecked());
+        setBoolean(this, MILTOWN2, miltown2.isChecked());
+        setBoolean(this, MOUSELEDUMOD, mouseledumod.isChecked());
+        setBoolean(this, ORBITRON_MEDIUM, orbitron_medium.isChecked());
+        setBoolean(this, PIXELLCD_7, pixellcd_7.isChecked());
+        setBoolean(this, SUBWAYTICKER, subwayticker.isChecked());
+    }
+
+    public void loadValues() {
+        digital.setChecked(getBoolean(this, DIGITAL, false));
+        ds_digib.setChecked(getBoolean(this, DS_DIGIB, false));
+        led_counter.setChecked(getBoolean(this, LED_COUNTER, false));
+        matrix.setChecked(getBoolean(this, MATRIX, false));
+        miltown2.setChecked(getBoolean(this, MILTOWN2, false));
+        mouseledumod.setChecked(getBoolean(this, MOUSELEDUMOD, false));
+        orbitron_medium.setChecked(getBoolean(this, ORBITRON_MEDIUM, false));
+        pixellcd_7.setChecked(getBoolean(this, PIXELLCD_7, false));
+        subwayticker.setChecked(getBoolean(this, SUBWAYTICKER, true));
+    }
 
 
     public static String getString(final Context context, final String key, final String defaultValue) {

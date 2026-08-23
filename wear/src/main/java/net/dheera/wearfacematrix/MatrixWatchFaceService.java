@@ -20,20 +20,7 @@ import android.support.wearable.watchface.WatchFaceStyle;
 import android.text.format.DateFormat;
 import android.text.format.Time;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.wearable.DataApi;
-import com.google.android.gms.wearable.DataEvent;
-import com.google.android.gms.wearable.DataEventBuffer;
-import com.google.android.gms.wearable.DataItem;
-import com.google.android.gms.wearable.DataMap;
-import com.google.android.gms.wearable.DataMapItem;
-import com.google.android.gms.wearable.Wearable;
-
 import java.util.Random;
 import java.util.TimeZone;
 
@@ -45,8 +32,8 @@ public class MatrixWatchFaceService extends CanvasWatchFaceService {
         return new Engine();
     }
 
-    private class Engine extends CanvasWatchFaceService.Engine implements DataApi.DataListener,
-            GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+    private class Engine extends CanvasWatchFaceService.Engine {
+
 
 
         private final int mSettingsNumRows = 23;
@@ -77,10 +64,16 @@ orbitron_medium.otf
 pixellcd_7.ttf
 subwayticker.ttf
 
-
-* */
-        boolean matrixfont;
-        boolean subwaytickerfont;
+*/
+        boolean digital;
+        boolean ds_digib;
+        boolean led_counter;
+        boolean matrix;
+        boolean miltown2;
+        boolean mouseledumod;
+        boolean orbitron_medium;
+        boolean pixellcd_7;
+        boolean subwayticker;
 
         private final String[] matrixChars = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L",
                 "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4",
@@ -94,11 +87,6 @@ subwayticker.ttf
         private int mCharWidth;
         private int mXOffset;
 
-        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(MatrixWatchFaceService.this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(Wearable.API)
-                .build();
 
         final BroadcastReceiver mTimeZoneReceiver = new BroadcastReceiver() {
             @Override
@@ -116,6 +104,75 @@ subwayticker.ttf
 
         Bitmap mBackgroundBitmap;
         Bitmap mBackgroundScaledBitmap;
+
+        public void loadValues() {
+            Context context = getApplicationContext();
+
+            digital = MatrixWatchFaceSettings.getBoolean(context, MatrixWatchFaceSettings.DIGITAL,false);
+            ds_digib = MatrixWatchFaceSettings.getBoolean(context, MatrixWatchFaceSettings.DS_DIGIB,false);
+            led_counter = MatrixWatchFaceSettings.getBoolean(context, MatrixWatchFaceSettings.LED_COUNTER,false);
+            matrix = MatrixWatchFaceSettings.getBoolean(context, MatrixWatchFaceSettings.MATRIX,false);
+            miltown2 = MatrixWatchFaceSettings.getBoolean(context, MatrixWatchFaceSettings.MILTOWN2,false);
+            mouseledumod = MatrixWatchFaceSettings.getBoolean(context, MatrixWatchFaceSettings.MOUSELEDUMOD,false);
+            orbitron_medium = MatrixWatchFaceSettings.getBoolean(context, MatrixWatchFaceSettings.ORBITRON_MEDIUM,false);
+            pixellcd_7 = MatrixWatchFaceSettings.getBoolean(context, MatrixWatchFaceSettings.PIXELLCD_7,false);
+            subwayticker = MatrixWatchFaceSettings.getBoolean(context, MatrixWatchFaceSettings.SUBWAYTICKER, true);
+
+
+            Resources resources = MatrixWatchFaceService.this.getResources();
+            if (digital) {
+                mDigitalActiveTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "digital.ttf"));
+            }
+            if (ds_digib) {
+                mDigitalActiveTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "ds_digib.ttf"));
+            }
+            if (led_counter) {
+                mDigitalActiveTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "led_counter.ttf"));
+            }
+            if (matrix) {
+                mDigitalActiveTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "matrix.ttf"));
+            }
+            if (mouseledumod) {
+                mDigitalActiveTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "mouseledumod.ttf"));
+            }
+            if (orbitron_medium) {
+                mDigitalActiveTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "orbitron_medium.otf"));
+            }
+            if (pixellcd_7) {
+                mDigitalActiveTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "pixellcd_7.ttf"));
+            }
+            if (subwayticker) {
+                mDigitalActiveTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "subwayticker.ttf"));
+            }
+
+            if (digital) {
+                mDigitalAmbientTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "digital.ttf"));
+            }
+            if (ds_digib) {
+                mDigitalAmbientTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "ds_digib.ttf"));
+            }
+            if (led_counter) {
+                mDigitalAmbientTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "led_counter.ttf"));
+            }
+            if (matrix) {
+                mDigitalAmbientTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "matrix.ttf"));
+            }
+            if (mouseledumod) {
+                mDigitalAmbientTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "mouseledumod.ttf"));
+            }
+            if (orbitron_medium) {
+                mDigitalAmbientTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "orbitron_medium.otf"));
+            }
+            if (pixellcd_7) {
+                mDigitalAmbientTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "pixellcd_7.ttf"));
+            }
+            if (subwayticker) {
+                mDigitalAmbientTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "subwayticker.ttf"));
+            }
+
+
+        }
+
 
 
         @Override
@@ -136,10 +193,16 @@ subwayticker.ttf
             mBackgroundBitmap = ((BitmapDrawable) backgroundDrawable).getBitmap();
 
             Context context = getApplicationContext();
-            matrixfont = MatrixWatchFaceUtil.getBoolean(context, MatrixWatchFaceUtil.KEY_MATRIXFONT,
-                    MatrixWatchFaceUtil.KEY_MATRIXFONT_DEF);
-            subwaytickerfont = MatrixWatchFaceUtil.getBoolean(context, MatrixWatchFaceUtil.KEY_SUBWAYTICKERFONT,
-                    MatrixWatchFaceUtil.KEY_SUBWAYTICKERFONT_DEF);
+
+            digital = MatrixWatchFaceSettings.getBoolean(context, MatrixWatchFaceSettings.DIGITAL,false);
+            ds_digib = MatrixWatchFaceSettings.getBoolean(context, MatrixWatchFaceSettings.DS_DIGIB,false);
+            led_counter = MatrixWatchFaceSettings.getBoolean(context, MatrixWatchFaceSettings.LED_COUNTER,false);
+            matrix = MatrixWatchFaceSettings.getBoolean(context, MatrixWatchFaceSettings.MATRIX,false);
+            miltown2 = MatrixWatchFaceSettings.getBoolean(context, MatrixWatchFaceSettings.MILTOWN2,false);
+            mouseledumod = MatrixWatchFaceSettings.getBoolean(context, MatrixWatchFaceSettings.MOUSELEDUMOD,false);
+            orbitron_medium = MatrixWatchFaceSettings.getBoolean(context, MatrixWatchFaceSettings.ORBITRON_MEDIUM,false);
+            pixellcd_7 = MatrixWatchFaceSettings.getBoolean(context, MatrixWatchFaceSettings.PIXELLCD_7,false);
+            subwayticker = MatrixWatchFaceSettings.getBoolean(context, MatrixWatchFaceSettings.SUBWAYTICKER, true);
 
 
             /*Point size = new Point();
@@ -174,10 +237,40 @@ subwayticker.ttf
             mDigitalActiveTimePaint.setAntiAlias(true);
             // mDigitalActiveTimePaint.setStyle(Paint.Style.STROKE);
             // mDigitalActiveTimePaint.setTypeface(Typeface.createFromFile(new File(R.raw.orbitron_medium)));
-            if (matrixfont) {
-                mDigitalActiveTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "miltown2.ttf"));
+
+            /*
+            digital.ttf
+            ds_digib.ttf
+            led_counter.ttf
+            matrix.ttf
+            miltown2.ttf
+            mouseledumod.ttf
+            orbitron_medium.otf
+            pixellcd_7.ttf
+            subwayticker.ttf
+              */
+            if (digital) {
+                mDigitalActiveTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "digital.ttf"));
             }
-            if (subwaytickerfont) {
+            if (ds_digib) {
+                mDigitalActiveTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "ds_digib.ttf"));
+            }
+            if (led_counter) {
+                mDigitalActiveTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "led_counter.ttf"));
+            }
+            if (matrix) {
+                mDigitalActiveTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "matrix.ttf"));
+            }
+            if (mouseledumod) {
+                mDigitalActiveTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "mouseledumod.ttf"));
+            }
+            if (orbitron_medium) {
+                mDigitalActiveTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "orbitron_medium.otf"));
+            }
+            if (pixellcd_7) {
+                mDigitalActiveTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "pixellcd_7.ttf"));
+            }
+            if (subwayticker) {
                 mDigitalActiveTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "subwayticker.ttf"));
             }
             mDigitalActiveTimePaint.setShadowLayer(20f, 0f, 0f, Color.GREEN);
@@ -186,10 +279,30 @@ subwayticker.ttf
             mDigitalAmbientTimePaint.setColor(Color.rgb(255, 255, 255));
             mDigitalAmbientTimePaint.setTextAlign(Paint.Align.CENTER);
             mDigitalAmbientTimePaint.setAntiAlias(true);
-            if (matrixfont) {
-                mDigitalAmbientTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "miltown2.ttf"));
+
+
+            if (digital) {
+                mDigitalAmbientTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "digital.ttf"));
             }
-            if (subwaytickerfont) {
+            if (ds_digib) {
+                mDigitalAmbientTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "ds_digib.ttf"));
+            }
+            if (led_counter) {
+                mDigitalAmbientTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "led_counter.ttf"));
+            }
+            if (matrix) {
+                mDigitalAmbientTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "matrix.ttf"));
+            }
+            if (mouseledumod) {
+                mDigitalAmbientTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "mouseledumod.ttf"));
+            }
+            if (orbitron_medium) {
+                mDigitalAmbientTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "orbitron_medium.otf"));
+            }
+            if (pixellcd_7) {
+                mDigitalAmbientTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "pixellcd_7.ttf"));
+            }
+            if (subwayticker) {
                 mDigitalAmbientTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "subwayticker.ttf"));
             }
 
@@ -404,7 +517,7 @@ subwayticker.ttf
             super.onVisibilityChanged(visible);
 
             if (visible) {
-                mGoogleApiClient.connect();
+                loadValues();
                 registerReceiver();
 
                 // Update time zone in case it changed while we weren't visible.
@@ -413,10 +526,7 @@ subwayticker.ttf
                 invalidate();
             } else {
                 unregisterReceiver();
-                if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
-                    Wearable.DataApi.removeListener(mGoogleApiClient, this);
-                    mGoogleApiClient.disconnect();
-                }
+
             }
 
         }
@@ -436,141 +546,6 @@ subwayticker.ttf
             }
             mRegisteredTimeZoneReceiver = false;
             MatrixWatchFaceService.this.unregisterReceiver(mTimeZoneReceiver);
-        }
-
-        private void updateConfigDataItemAndUiOnStartup() {
-            MatrixWatchFaceUtil.fetchConfigDataMap(mGoogleApiClient,
-                    new MatrixWatchFaceUtil.FetchConfigDataMapCallback() {
-                        @Override
-                        public void onConfigDataMapFetched(DataMap startupConfig) {
-                            // use the newly received settings
-                            if (startupConfig != null && !startupConfig.isEmpty()) {
-                                updateUiForConfigDataMap(startupConfig);
-                            }
-                        }
-                    }
-            );
-        }
-
-        @Override
-        public void onDataChanged(DataEventBuffer dataEvents) {
-            try {
-                for (DataEvent dataEvent : dataEvents) {
-                    if (dataEvent.getType() != DataEvent.TYPE_CHANGED) {
-                        continue;
-                    }
-
-                    DataItem dataItem = dataEvent.getDataItem();
-                    if (!dataItem.getUri().getPath().equals(MatrixWatchFaceUtil.PATH_WITH_FEATURE)) {
-                        continue;
-                    }
-
-                    DataMapItem dataMapItem = DataMapItem.fromDataItem(dataItem);
-                    DataMap config = dataMapItem.getDataMap();
-                    Log.d(TAG, "Config DataItem updated:" + config);
-                    if (config != null && !config.isEmpty()) {
-                        updateUiForConfigDataMap(config);
-                    }
-                }
-            } finally {
-                dataEvents.close();
-            }
-        }
-
-        private void updateUiForConfigDataMap(final DataMap dataMap) {
-            Log.d(TAG, "updateUiForConfigDataMap: " + dataMap);
-
-            Resources resources = MatrixWatchFaceService.this.getResources();
-            matrixfont = dataMap
-                    .getBoolean(MatrixWatchFaceUtil.KEY_MATRIXFONT, MatrixWatchFaceUtil.KEY_MATRIXFONT_DEF);
-            subwaytickerfont = dataMap
-                    .getBoolean(MatrixWatchFaceUtil.KEY_SUBWAYTICKERFONT, MatrixWatchFaceUtil.KEY_SUBWAYTICKERFONT_DEF);
-
-            if (matrixfont) {
-                mDigitalActiveTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "miltown2.ttf"));
-            }
-            if (subwaytickerfont) {
-                mDigitalActiveTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "subwayticker.ttf"));
-            }
-
-            if (matrixfont) {
-                mDigitalAmbientTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "miltown2.ttf"));
-            }
-            if (subwaytickerfont) {
-                mDigitalAmbientTimePaint.setTypeface(Typeface.createFromAsset(resources.getAssets(), "subwayticker.ttf"));
-            }
-
-            // redraw the canvas
-            invalidate();
-
-            // persist these values for the next time the watch face is instantiated
-            saveConfigValues();
-
-        }
-
-        private void saveConfigValues() {
-            Log.d(TAG, "saveConfigValues");
-
-            Context context = getApplicationContext();
-
-
-            MatrixWatchFaceUtil.setBoolean(context, MatrixWatchFaceUtil.KEY_MATRIXFONT, matrixfont);
-            MatrixWatchFaceUtil.setBoolean(context, MatrixWatchFaceUtil.KEY_SUBWAYTICKERFONT, subwaytickerfont);
-        }
-
-
-        @Override
-        public void onTouchEvent(MotionEvent event) {
-
-            final int action = event.getAction();
-            switch (action) {
-                case MotionEvent.ACTION_BUTTON_PRESS: {
-                    Log.i("matrix", "button pressed!!!!");
-                    break;
-                }
-            }
-
-            //super.onTouchEvent(event);
-        }
-
-        @Override
-        public void onTapCommand(int tapType, int x, int y, long eventTime) {
-            switch (tapType) {
-                case TAP_TYPE_TOUCH:
-                    Log.i("matrix", "tapped!!!!");// User touched the screen
-                    break;
-                case TAP_TYPE_TOUCH_CANCEL:
-                    // Touch gesture canceled
-                    break;
-                case TAP_TYPE_TAP:
-                    // User completed a tap
-                    // Do action and invalidate() to redraw
-                    //invalidate();
-                    break;
-            }
-        }
-
-
-
-
-
-
-        //WE NEED TO REMOVE THOSE GOOGLE STUFF HERE!!!!//
-        @Override
-        public void onConnected(Bundle connectionHint) {
-            Log.d(TAG, "onConnected: " + connectionHint);
-            Wearable.DataApi.addListener(mGoogleApiClient, Engine.this);
-            updateConfigDataItemAndUiOnStartup();
-        }
-
-        @Override
-        public void onConnectionSuspended(int cause) {
-            Log.d(TAG, "onConnectionSuspended: " + cause);
-        }
-
-        @Override
-        public void onConnectionFailed(ConnectionResult result) {
-            Log.d(TAG, "onConnectionFailed: " + result);
         }
 
 

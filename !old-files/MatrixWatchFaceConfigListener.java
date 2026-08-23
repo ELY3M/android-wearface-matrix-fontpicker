@@ -12,6 +12,7 @@ import android.util.Log;
 
 import java.util.concurrent.TimeUnit;
 
+
 // A WearableListenerService listening for WatchFaceService config messages and updating the config
 // DataItem accordingly.
 public class MatrixWatchFaceConfigListener extends WearableListenerService
@@ -63,4 +64,5 @@ public class MatrixWatchFaceConfigListener extends WearableListenerService
     public void onConnectionFailed(ConnectionResult result) {
         Log.d(TAG, "onConnectionFailed: " + result);
     }
+    
 }
